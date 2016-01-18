@@ -592,7 +592,44 @@ def iupac(pos):
     
     
     return IUPAC[pos]
+
+def mafft_align_contigs(fpath):
     
+    from Bio import AlignIO
+    import subprocess
+    from Bio.Align.Applications import MafftCommandline
+    import warnings
+    
+    # Align the sequences
+    mafft_cline = MafftCommandline(input=fpath, op=3.0)
+    child = subprocess.Popen(str(mafft_cline),
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             shell=True)
+    
+    align = AlignIO.read(child.stdout, "fasta")
+    
+    if len(align[0].seq) == str(align[0].seq).count('-'):
+        warnings.warn('bad alignment pair %s'%input)
+
+    if len(align[1].seq) == str(align[1].seq).count('-'):
+        warnings.warn('bad alignment pair %s'%input)
+    
+    return align
+
+def get_aln_cumulative_entropy(align, char_type = 'dna'):
+    # get cumulative entropy for alignment
+    from reprophylo import entropy
+
+    entropies =[]
+    for i in range(align.get_alignment_length()):
+        column = align[:,i]
+        entropies.append(entropy(column, char_type))
+    cum_entropy = sum(entropies) 
+    print "Entropies:", str(entropies[:10]),'... Total:', cum_entropy
+    return cum_entropy
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()    
