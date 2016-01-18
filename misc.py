@@ -626,7 +626,7 @@ def get_aln_cumulative_entropy(align, char_type = 'dna'):
         column = align[:,i]
         entropies.append(entropy(column, char_type))
     cum_entropy = sum(entropies) 
-    print "Entropies:", str(entropies[:10]),'... Total:', cum_entropy
+    #print "Entropies:", str(entropies[:10]),'... Total:', cum_entropy
     return cum_entropy
 
 
