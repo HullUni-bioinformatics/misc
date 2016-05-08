@@ -629,6 +629,20 @@ def get_aln_cumulative_entropy(align, char_type = 'dna'):
     #print "Entropies:", str(entropies[:10]),'... Total:', cum_entropy
     return cum_entropy
 
+def iter_half_matrix_indices(iterable):
+    """
+    >>> iterable = [1,2,3]
+    >>> for i,j in iter_half_matrix_indices(iterable):
+    >>>     print i, j
+    0 1
+    0 2
+    1 2
+    """
+    length = len(iterable)
+    for i in range(len(iterable)):
+        for j in range(i+1, len(iterable)):
+            yield (i, j)
+
 
 if __name__ == "__main__":
     import doctest
